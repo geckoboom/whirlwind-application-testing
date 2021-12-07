@@ -1,0 +1,33 @@
+{
+    "name": "geckoboom/whirlwind-application-testing",
+    "description": "Functional testing for whirlwind micro framework",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "phpunit/phpunit": "^9.0",
+        "mockery/mockery": "^1.4",
+        "softcreatr/jsonpath": "^0.7.5",
+        "justinrainbow/json-schema": "^5.2"
+    },
+    "require-dev": {
+        "whirlwind-framework/framework": "~0.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "WhirlwindApplicationTesting\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WhirlwindApplicationTesting\\Test\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Artem Tsyganov",
+            "email": "ontroip@gmail.com"
+        }
+    ]
+}
