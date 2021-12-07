@@ -8,13 +8,14 @@ use DG\BypassFinals;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Whirlwind\App\Application\Application;
+use WhirlwindApplicationTesting\Traits\InteractWithContainer;
 use WhirlwindApplicationTesting\Traits\InteractWithFixtures;
 use WhirlwindApplicationTesting\Traits\MakesHttpRequests;
 use WhirlwindApplicationTesting\Util\ContainerAwareApplication;
 
 abstract class RestTestCase extends TestCase
 {
-    use InteractWithFixtures;
+    use InteractWithContainer;
     use MakesHttpRequests;
 
     /**
@@ -25,7 +26,6 @@ abstract class RestTestCase extends TestCase
      * @var ContainerInterface
      */
     protected ContainerInterface $container;
-    protected array $defaultHeaders = [];
     /**
      * @var array
      */
@@ -51,15 +51,32 @@ abstract class RestTestCase extends TestCase
 
     /**
      * @return void
-     * @throws Fixture\Exception\InvalidConfigException
      */
     protected function setUpTraits(): void
     {
-        $uses = \array_flip(\class_uses($this));
+        $results = [];
+
+        $classes =  \array_reverse(\class_parents(static::class)) + [static::class => static::class];
+        foreach ($classes as $class) {
+            $results += $this->traitUsesRecursive($class);
+        }
+
+        $uses = \array_flip(\array_unique($results));
 
         if (isset($uses[InteractWithFixtures::class])) {
             $this->initFixtures();
         }
+    }
+
+    private function traitUsesRecursive(string $trait): array
+    {
+        $traits = class_uses($trait) ?: [];
+
+        foreach ($traits as $trait) {
+            $traits += $this->traitUsesRecursive($trait);
+        }
+
+        return $traits;
     }
 
     /**
@@ -71,5 +88,11 @@ abstract class RestTestCase extends TestCase
 
         unset($this->app, $this->container);
         $_SERVER = $this->serverParams;
+
+        if ($container = \Mockery::getContainer()) {
+            $this->addToAssertionCount($container->mockery_getExpectationCount());
+        }
+
+        \Mockery::close();
     }
 }

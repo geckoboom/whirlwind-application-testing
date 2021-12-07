@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace WhirlwindApplicationTesting\Traits;
 
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Stream;
+use League\Route\Http\Exception\HttpExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -48,7 +51,14 @@ trait MakesHttpRequests
     public function addHttpAuthentication(string $username, string $password): self
     {
         return $this->addHeader('PHP_AUTH_USER', $username)
-            ->addHeader('PHP_AUTH_PW', $password);
+            ->addHeader('PHP_AUTH_PW', $password)
+            ->addHeader(
+                'Authorization',
+                \sprintf(
+                    'Basic %s',
+                    \base64_encode(\sprintf('%s:%s', $username, $password))
+                )
+            );
     }
 
     /**
@@ -96,8 +106,14 @@ trait MakesHttpRequests
      */
     protected function formatServerHeaderKey(string $name): string
     {
+        $serverCopy = [
+            'CONTENT_TYPE',
+            'REMOTE_ADDR',
+            'PHP_AUTH_USER',
+            'PHP_AUTH_PW',
+        ];
         $needle = 'HTTP_';
-        if (0 !== \strncmp($name, $needle, \strlen($needle)) && 'CONTENT_TYPE' !== $name && 'REMOTE_ADDR' !== $name) {
+        if (0 !== \strncmp($name, $needle, \strlen($needle)) && !\in_array($name, $serverCopy)) {
             return 'HTTP_' . $name;
         }
 
@@ -123,8 +139,15 @@ trait MakesHttpRequests
         array $server,
         ?string $content = null
     ): TestResponse {
-        $server['REQUEST_METHOD'] = \strtoupper($method);
-        \parse_str(\parse_url($uri, PHP_URL_QUERY), $query);
+        $server['REQUEST_METHOD'] = \strtolower($method);
+        $server['HTTP_HOST'] = 'localhost';
+        $server['REQUEST_URI'] = $uri;
+
+        $query = [];
+        $rawQuery = \parse_url($uri, PHP_URL_QUERY);
+        if (null !== $rawQuery) {
+            \parse_str($rawQuery, $query);
+        }
         /** @var ServerRequestFactoryInterface $requestFactory */
         $requestFactory = $this->container->get(ServerRequestFactoryInterface::class);
         $request = $requestFactory::fromGlobals(
@@ -136,10 +159,24 @@ trait MakesHttpRequests
         );
 
         if (null !== $content) {
-            $request->getBody()->write($content);
+            $body = new Stream('php://temp', 'wb+');
+            $body->write($content);
+            $body->rewind();
+            $request = $request->withBody($body)
+                ->withParsedBody(\json_decode($content, true));
         }
 
-        return $this->createTestResponse($this->app->handle($request));
+        try {
+            return $this->createTestResponse($this->app->handle($request));
+        } catch (\Throwable $e) {
+            if ($e instanceof HttpExceptionInterface) {
+                $response = new Response();
+
+                return $this->createTestResponse($e->buildJsonResponse($response));
+            }
+
+            throw $e;
+        }
     }
 
     /**
@@ -155,6 +192,8 @@ trait MakesHttpRequests
      * @param string $uri
      * @param array $headers
      * @return TestResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function getJson(string $uri, array $headers = []): TestResponse
     {

@@ -23,7 +23,7 @@ trait InteractWithContainer
      */
     public function bindInstance(string $id, $concrete)
     {
-        return $this->bindDefinition($id, $concrete)->getConcrete();
+        return $this->bindDefinition($id, $concrete)->resolve();
     }
 
     /**
@@ -53,7 +53,7 @@ trait InteractWithContainer
      */
     public function bindSingleton(string $id, $concrete)
     {
-        return $this->bindDefinition($id, $concrete)->setShared(true)->getConcrete();
+        return $this->bindDefinition($id, $concrete)->setShared(true)->resolve();
     }
 
     /**

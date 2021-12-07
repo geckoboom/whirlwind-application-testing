@@ -135,7 +135,7 @@ class TestResponse
             $actual = $this->baseResponse->getHeader($name);
             assertTrue(
                 \in_array($value, $actual),
-                "Header [{$name}] was found, but value [{$actual}] does not match [{$value}]."
+                "Header [{$name}] was found, but value [{$value}] does not exist."
             );
         }
 
