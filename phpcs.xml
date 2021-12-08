@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="Coding Standard">
-    <description>Business Class Coding Standard</description>
+    <description>Coding Standard</description>
 
     <exclude-pattern type="relative">^vendor/*</exclude-pattern>
 
