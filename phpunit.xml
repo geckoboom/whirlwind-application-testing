@@ -6,6 +6,7 @@
         colors="true"
         verbose="true"
         cacheResult="false"
+        executionOrder="random"
         stopOnFailure="true">
 
     <testsuites>
