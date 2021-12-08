@@ -168,40 +168,10 @@ class AssertableJson
      */
     public function assertContainsJson(array $data): self
     {
-        $actual = \json_encode($this->sortRecursive((array) $this->jsonArray));
-        assertEquals(\json_encode($this->sortRecursive($data)), $actual);
+        $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
+        assertEquals(\json_encode($this->reorderAssocKeys($data)), $actual);
 
         return $this;
-    }
-
-    /**
-     * @param array $array
-     * @return array
-     */
-    protected function sortRecursive(array $array): array
-    {
-        foreach ($array as $key => $value) {
-            if (\is_array($value)) {
-                $array[$key] = $this->sortRecursive($value);
-            }
-        }
-
-        if ($this->isAssoc($array)) {
-            \ksort($array, SORT_REGULAR);
-        } else {
-            \sort($array, SORT_REGULAR);
-        }
-
-        return $array;
-    }
-
-    /**
-     * @param array $array
-     * @return bool
-     */
-    protected function isAssoc(array $array): bool
-    {
-        return \array_values($array) !== $array;
     }
 
     /**
@@ -210,9 +180,9 @@ class AssertableJson
      */
     public function assertContainsJsonFragment(array $data): self
     {
-        $actual = \json_encode($this->sortRecursive((array) $this->jsonArray));
+        $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
 
-        foreach ($this->sortRecursive($data) as $key => $value) {
+        foreach ($this->reorderAssocKeys($data) as $key => $value) {
             $needles = $this->extractSearchNeedles($key, $value);
             assertTrue(
                 $this->isStringContainsAnyNeedles($actual, $needles),
@@ -264,11 +234,12 @@ class AssertableJson
      */
     public function assertNotContainsExactJson(array $data): self
     {
-        $actual = \json_encode($this->sortRecursive((array) $this->jsonArray));
+        $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
 
-        foreach ($this->sortRecursive($data) as $key => $value) {
+        foreach ($this->reorderAssocKeys($data) as $key => $value) {
             $needles = $this->extractSearchNeedles($key, $value);
-            if (!$this->isStringContainsAnyNeedles($actual, $needles)) {
+            if (!($isContains = $this->isStringContainsAnyNeedles($actual, $needles))) {
+                assertFalse($isContains);
                 return $this;
             }
         }
@@ -287,9 +258,9 @@ class AssertableJson
      */
     public function assertNotContainsJson(array $data): self
     {
-        $actual = \json_encode($this->sortRecursive((array) $this->jsonArray));
+        $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
 
-        foreach ($this->sortRecursive($data) as $key => $value) {
+        foreach ($this->reorderAssocKeys($data) as $key => $value) {
             $needles = $this->extractSearchNeedles($key, $value);
             assertFalse(
                 $this->isStringContainsAnyNeedles($actual, $needles),
@@ -324,7 +295,7 @@ class AssertableJson
      */
     public function assertMatchesJsonType(array $jsonSchema, ?string $jsonPath = null): void
     {
-        $actual = $this->getJson($jsonPath);
+        $actual = \json_decode(\json_encode($this->getJson($jsonPath)));
 
         $validator = new Validator();
 

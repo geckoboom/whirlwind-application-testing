@@ -45,7 +45,7 @@ trait InteractWithFixtures
         foreach ($fixtures as $fixture) {
             $fixture->load();
         }
-        foreach ($fixtures as $fixture) {
+        foreach (\array_reverse($fixtures) as $fixture) {
             $fixture->afterLoad();
         }
     }
@@ -105,7 +105,9 @@ trait InteractWithFixtures
                         $stack[] = $config[$dep] ?? ['class' => $dep];
                     }
                 } elseif ($instances[$name] === false) {
-                    throw new InvalidConfigException("A circular dependency is detected for fixture '$class'.");
+                    throw new InvalidConfigException(
+                        "A circular dependency is detected for fixture '$class'."
+                    );
                 }
             }
         }
@@ -147,6 +149,7 @@ trait InteractWithFixtures
             $fixture->beforeUnload();
         }
 
+        $fixtures = \array_reverse($fixtures);
         foreach ($fixtures as $fixture) {
             $fixture->unload();
         }

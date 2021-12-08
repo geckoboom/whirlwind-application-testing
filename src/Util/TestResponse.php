@@ -29,7 +29,6 @@ class TestResponse
     public const METHOD_NOT_ALLOWED = 405;
     public const UNPROCESSABLE_ENTITY = 422;
 
-    public const SERVER_ERROR = 500;
     /**
      * @var ResponseInterface
      */
@@ -119,11 +118,6 @@ class TestResponse
         return $this->assertResponseCodeIs(self::UNPROCESSABLE_ENTITY);
     }
 
-    public function assertResponseCodeIsServerError(): self
-    {
-        return $this->assertResponseCodeIs(self::SERVER_ERROR);
-    }
-
     public function assertHeader(string $name, $value = null): self
     {
         assertTrue(
@@ -168,8 +162,14 @@ class TestResponse
         $haystack = $this->baseResponse->getBody()->getContents();
 
         if ($escape) {
+            $needle = \htmlspecialchars(
+                $needle,
+                ENT_QUOTES,
+                'UTF-8',
+                true
+            );
             $haystack = \htmlspecialchars(
-                $this->baseResponse->getBody()->getContents() ?? '',
+                $haystack ?? '',
                 ENT_QUOTES,
                 'UTF-8',
                 true
@@ -211,6 +211,7 @@ class TestResponse
 
     public function decodeResponseJson(): AssertableJson
     {
+        $this->baseResponse->getBody()->rewind();
         $testJson = new AssertableJson($this->baseResponse->getBody()->getContents());
 
         $decodedResponse = $testJson->getJson();

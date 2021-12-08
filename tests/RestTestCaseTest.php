@@ -6,8 +6,11 @@ namespace WhirlwindApplicationTesting\Test;
 
 use DG\BypassFinals;
 use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\ResponseFactory;
 use League\Container\Container;
 use League\Route\Strategy\ApplicationStrategy;
+use League\Route\Strategy\JsonStrategy;
+use League\Route\Strategy\StrategyAwareInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Whirlwind\App\Application\Application;
@@ -417,5 +420,27 @@ class RestTestCaseTest extends TestCase
     {
         $this->tester->get('/api/test')
             ->assertResponseCodeIsNotFound();
+    }
+
+    public function testMethodNotAllowedJsonStrategy()
+    {
+        /** @var RouterInterface&StrategyAwareInterface $router */
+        $router = $this->app->getContainer()->get(RouterInterface::class);
+        $strategy = (new JsonStrategy(new ResponseFactory()))->setContainer($this->app->getContainer());
+        $router->setStrategy($strategy);
+
+        $router->map('get', '/api/test', function (ServerRequestInterface $request) {
+            return new JsonResponse([]);
+        });
+
+        $actual = $this->tester->post('/api/test')
+            ->assertResponseCodeIsNotAllowed()
+            ->getJson();
+
+        $expected = [
+            'status_code' => 405,
+            'reason_phrase' => 'Method Not Allowed',
+        ];
+        self::assertSame($expected, $actual);
     }
 }

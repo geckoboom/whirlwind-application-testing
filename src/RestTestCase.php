@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WhirlwindApplicationTesting;
 
 use DG\BypassFinals;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Whirlwind\App\Application\Application;
@@ -15,6 +16,7 @@ use WhirlwindApplicationTesting\Util\ContainerAwareApplication;
 
 abstract class RestTestCase extends TestCase
 {
+    use MockeryPHPUnitIntegration;
     use InteractWithContainer;
     use MakesHttpRequests;
 
@@ -88,11 +90,5 @@ abstract class RestTestCase extends TestCase
 
         unset($this->app, $this->container);
         $_SERVER = $this->serverParams;
-
-        if ($container = \Mockery::getContainer()) {
-            $this->addToAssertionCount($container->mockery_getExpectationCount());
-        }
-
-        \Mockery::close();
     }
 }

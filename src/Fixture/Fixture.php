@@ -121,10 +121,16 @@ abstract class Fixture implements FixtureInterface, \IteratorAggregate, \ArrayAc
             return [];
         }
 
-        if (\is_file($this->dataFile)) {
-            return require($this->dataFile);
+        $dataFile = $this->resolveDataFilePath();
+        if (\is_file($dataFile)) {
+            return require($dataFile);
         } else {
             throw new InvalidConfigException("Fixture file does not exist: {$this->dataFile}");
         }
+    }
+
+    protected function resolveDataFilePath(): string
+    {
+        return __DIR__ . DIRECTORY_SEPARATOR . \trim($this->dataFile, DIRECTORY_SEPARATOR);
     }
 }
