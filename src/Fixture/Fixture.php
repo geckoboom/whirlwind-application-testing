@@ -131,6 +131,11 @@ abstract class Fixture implements FixtureInterface, \IteratorAggregate, \ArrayAc
 
     protected function resolveDataFilePath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . \trim($this->dataFile, DIRECTORY_SEPARATOR);
+        return \sprintf(
+            '%1$s%2$sdata%2$s%3$s',
+            \dirname((new \ReflectionClass($this))->getFileName()),
+            DIRECTORY_SEPARATOR,
+            $this->dataFile
+        );
     }
 }

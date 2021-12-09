@@ -148,17 +148,4 @@ class AssertableJsonTest extends TestCase
         ];
         self::assertSame($expected, $this->object->getJson('nested')[0]);
     }
-
-    public function testAssertContainsJson()
-    {
-        $this->object->assertContainsJson($this->json);
-    }
-
-    public function testAssertNotContainsJson()
-    {
-        $test = [
-            'unknown' => 'value',
-        ];
-        $this->object->assertNotContainsJson($test);
-    }
 }

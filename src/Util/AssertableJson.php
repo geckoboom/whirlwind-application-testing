@@ -166,18 +166,6 @@ class AssertableJson
      * @param array $data
      * @return $this
      */
-    public function assertContainsJson(array $data): self
-    {
-        $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
-        assertEquals(\json_encode($this->reorderAssocKeys($data)), $actual);
-
-        return $this;
-    }
-
-    /**
-     * @param array $data
-     * @return $this
-     */
     public function assertContainsJsonFragment(array $data): self
     {
         $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
@@ -250,28 +238,6 @@ class AssertableJson
             'within' . PHP_EOL . PHP_EOL .
             "[{$actual}]."
         );
-    }
-
-    /**
-     * @param array $data
-     * @return $this
-     */
-    public function assertNotContainsJson(array $data): self
-    {
-        $actual = \json_encode($this->reorderAssocKeys((array) $this->jsonArray));
-
-        foreach ($this->reorderAssocKeys($data) as $key => $value) {
-            $needles = $this->extractSearchNeedles($key, $value);
-            assertFalse(
-                $this->isStringContainsAnyNeedles($actual, $needles),
-                'Found unexpected JSON fragment: ' . PHP_EOL . PHP_EOL .
-                '[' . \json_encode([$key => $value]) . ']' . PHP_EOL . PHP_EOL .
-                'within' . PHP_EOL . PHP_EOL .
-                "[{$actual}]."
-            );
-        }
-
-        return $this;
     }
 
     /**

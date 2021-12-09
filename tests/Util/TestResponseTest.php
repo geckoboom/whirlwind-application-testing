@@ -169,32 +169,10 @@ class TestResponseTest extends TestCase
         ]);
     }
 
-    public function testAssertResponseContainsJson()
-    {
-        $this->response->assertResponseContainsJson([
-            'nested' => [
-                'test' => 'value',
-            ],
-            'test' => 1,
-            'sort' => 'asc',
-            'array' => [
-                3.1,
-                4.2,
-            ],
-        ]);
-    }
-
     public function testAssertResponseCodeIsUnauthorized()
     {
         $response = new TestResponse(new JsonResponse([], TestResponse::UNAUTHORIZED));
         $response->assertResponseCodeIsUnauthorized();
-    }
-
-    public function testAssertResponseNotContainsJson()
-    {
-        $this->response->assertResponseNotContainsJson([
-            'unexpected' => 1,
-        ]);
     }
 
     public function testAssertResponseIsJson()

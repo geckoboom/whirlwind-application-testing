@@ -185,8 +185,14 @@ class TestResponse
         $haystack = $this->baseResponse->getBody()->getContents();
 
         if ($escape) {
+            $needle = \htmlspecialchars(
+                $needle,
+                ENT_QUOTES,
+                'UTF-8',
+                true
+            );
             $haystack = \htmlspecialchars(
-                $this->baseResponse->getBody()->getContents() ?? '',
+                $haystack ?? '',
                 ENT_QUOTES,
                 'UTF-8',
                 true
@@ -236,13 +242,6 @@ class TestResponse
         return $this;
     }
 
-    public function assertResponseContainsJson(array $data): self
-    {
-        $this->decodeResponseJson()->assertContainsJson($data);
-
-        return $this;
-    }
-
     public function assertResponseContainsJsonFragment(array $data): self
     {
         $this->decodeResponseJson()->assertContainsJsonFragment($data);
@@ -253,13 +252,6 @@ class TestResponse
     public function assertResponseNotContainsExactJson(array $data): self
     {
         $this->decodeResponseJson()->assertNotContainsExactJson($data);
-
-        return $this;
-    }
-
-    public function assertResponseNotContainsJson(array $data): self
-    {
-        $this->decodeResponseJson()->assertNotContainsJson($data);
 
         return $this;
     }

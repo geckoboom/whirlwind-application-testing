@@ -77,6 +77,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function get(string $uri, array $headers = []): TestResponse
     {
@@ -130,13 +131,14 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function call(
         string $method,
         string $uri,
-        array $parameters,
-        array $files,
-        array $server,
+        array $parameters = [],
+        array $files = [],
+        array $server = [],
         ?string $content = null
     ): TestResponse {
         $server['REQUEST_METHOD'] = \strtolower($method);
@@ -194,6 +196,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function getJson(string $uri, array $headers = []): TestResponse
     {
@@ -208,6 +211,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function json(string $method, string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -262,6 +266,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function post(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -294,6 +299,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function put(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -313,6 +319,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function putJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -326,6 +333,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function patch(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -345,6 +353,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function patchJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -358,6 +367,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function delete(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -377,6 +387,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function deleteJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -390,6 +401,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function options(string $uri, array $data = [], array $headers = []): TestResponse
     {
@@ -409,6 +421,7 @@ trait MakesHttpRequests
      * @return TestResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function optionsJson(string $uri, array $data = [], array $headers = []): TestResponse
     {
