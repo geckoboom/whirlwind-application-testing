@@ -151,7 +151,7 @@ class RestTestCaseTest extends TestCase
         $headers = [
             'X-Test-Header' => 'test',
         ];
-        $router->map('get', '/api/test', function (ServerRequestInterface $request) use ($query, $headers) {
+        $router->map('GET', '/api/test', function (ServerRequestInterface $request) use ($query, $headers) {
             self::assertSame($query, $request->getQueryParams());
             self::assertTrue(\in_array($headers['X-Test-Header'], $request->getHeader('X-Test-Header')));
             return new JsonResponse(['response' => 'test']);
@@ -181,7 +181,7 @@ class RestTestCaseTest extends TestCase
 
         $header = 'Test';
 
-        $router->map('get', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('GET', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse(['response' => 'test'], 200, $request->getHeaders());
         });
 
@@ -195,7 +195,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('get', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('GET', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse(['response' => 'test'], 200, $request->getHeaders());
         });
 
@@ -209,7 +209,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('get', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('GET', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse(['response' => 'test'], 200, $request->getHeaders());
         });
 
@@ -223,7 +223,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('get', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('GET', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse(['response' => 'test'], 200, $request->getHeaders());
         });
 
@@ -236,7 +236,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('post', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('POST', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -254,7 +254,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('post', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('POST', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -273,7 +273,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('put', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('PUT', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -291,7 +291,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('put', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('PUT', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -310,7 +310,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('patch', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('PATCH', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -328,7 +328,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('patch', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('PATCH', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -347,7 +347,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('delete', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('DELETE', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -365,7 +365,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('delete', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('DELETE', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getParsedBody());
         });
 
@@ -384,7 +384,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('options', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('OPTIONS', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getQueryParams());
         });
 
@@ -402,7 +402,7 @@ class RestTestCaseTest extends TestCase
         /** @var RouterInterface $router */
         $router = $this->app->getContainer()->get(RouterInterface::class);
 
-        $router->map('options', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('OPTIONS', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse($request->getQueryParams());
         });
 
@@ -429,7 +429,7 @@ class RestTestCaseTest extends TestCase
         $strategy = (new JsonStrategy(new ResponseFactory()))->setContainer($this->app->getContainer());
         $router->setStrategy($strategy);
 
-        $router->map('get', '/api/test', function (ServerRequestInterface $request) {
+        $router->map('GET', '/api/test', function (ServerRequestInterface $request) {
             return new JsonResponse([]);
         });
 

@@ -42,7 +42,8 @@ use App\Models\User;
 
 abstract class TestCase extends RestTestCase
 {
-    protected function createApplication() : Application{
+    protected function createApplication(): Application
+    {
         $container = new Container();
         // register service providers here
         return new Application($container);
@@ -68,7 +69,7 @@ class UsersTest extends TestCase
             ->assertResponseIsSuccessful()
             ->assertResponseCodeIsOk()
             ->assertHeader('Content-Type', 'application/json')
-            ->assertResponseContainsJsonFragment(['id' => 1])
+            ->assertResponseContainsJsonFragment(['id' => 1]);
     }
 }
 ```
@@ -161,7 +162,7 @@ class UserFixture extends EntityFixture
     
     public function __construct(UserHydrator $hydrator, UserTableGateway $tableGateway) 
     {
-        parent::__construct($hydrator,$tableGateway);
+        parent::__construct($hydrator, $tableGateway);
     }   
 }
 ```
@@ -208,7 +209,7 @@ class UserProfileFixture extends EntityFixture
     
     public function __construct(UserProfileHydrator $hydrator, UserProfileTableGateway $tableGateway) 
     {
-        parent::__construct($hydrator,$tableGateway);
+        parent::__construct($hydrator, $tableGateway);
     }   
 }
 ```
@@ -224,9 +225,9 @@ trait and implement `fixtures()` method
 
 namespace Test;
 
-use Domain/Profile/Profile;
-use Test/Fixture/UserFixture;
-use Test/Fixture/UserProfileFixture;
+use Domain\Profile\Profile;
+use Test\Fixture\UserFixture;
+use Test\Fixture\UserProfileFixture;
 use WhirlwindApplicationTesting\Traits\InteractWithFixtures;
 
 class UsersTest extends TestCase
@@ -240,10 +241,10 @@ class UsersTest extends TestCase
             ->assertResponseIsSuccessful()
             ->assertResponseCodeIsOk()
             ->assertHeader('Content-Type', 'application/json')
-            ->assertResponseContainsJsonFragment(['id' => 1])
+            ->assertResponseContainsJsonFragment(['id' => 1]);
     }
     
-    public function fixtures() : array
+    public function fixtures(): array
     {
          return [
             'users' => UserFixtureClass::class,
