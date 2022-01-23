@@ -10,32 +10,18 @@ use WhirlwindApplicationTesting\Fixture\Exception\InvalidConfigException;
 
 class EntityFixture extends Fixture
 {
-    /**
-     * @var Hydrator
-     */
-    protected $hydrator;
-    /**
-     * @var TableGatewayInterface
-     */
-    protected $tableGateway;
-    /**
-     * @var string
-     */
-    protected $entityClass;
+    protected Hydrator $hydrator;
 
-    /**
-     * @param Hydrator $hydrator
-     * @param TableGatewayInterface $tableGateway
-     */
+    protected TableGatewayInterface $tableGateway;
+
+    protected string $entityClass;
+
     public function __construct(Hydrator $hydrator, TableGatewayInterface $tableGateway)
     {
         $this->hydrator = $hydrator;
         $this->tableGateway = $tableGateway;
     }
 
-    /**
-     * @param string $entityClass
-     */
     public function setEntityClass(string $entityClass): void
     {
         $this->entityClass = $entityClass;

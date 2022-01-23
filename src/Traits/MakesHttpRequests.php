@@ -141,7 +141,7 @@ trait MakesHttpRequests
         array $server = [],
         ?string $content = null
     ): TestResponse {
-        $server['REQUEST_METHOD'] = \strtolower($method);
+        $server['REQUEST_METHOD'] = \strtoupper($method);
         $server['HTTP_HOST'] = 'localhost';
         $server['REQUEST_URI'] = $uri;
 

@@ -20,22 +20,12 @@ abstract class RestTestCase extends TestCase
     use InteractWithContainer;
     use MakesHttpRequests;
 
-    /**
-     * @var Application
-     */
     protected Application $app;
-    /**
-     * @var ContainerInterface
-     */
+
     protected ContainerInterface $container;
-    /**
-     * @var array
-     */
+
     protected array $serverParams = [];
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         BypassFinals::enable();
@@ -46,14 +36,8 @@ abstract class RestTestCase extends TestCase
         $this->setUpTraits();
     }
 
-    /**
-     * @return Application
-     */
     abstract protected function createApplication(): Application;
 
-    /**
-     * @return void
-     */
     protected function setUpTraits(): void
     {
         $results = [];
@@ -81,9 +65,6 @@ abstract class RestTestCase extends TestCase
         return $traits;
     }
 
-    /**
-     * @return void
-     */
     protected function tearDown(): void
     {
         parent::tearDown();

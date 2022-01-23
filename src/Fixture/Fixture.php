@@ -8,18 +8,11 @@ use WhirlwindApplicationTesting\Fixture\Exception\InvalidConfigException;
 
 abstract class Fixture implements FixtureInterface, \IteratorAggregate, \ArrayAccess, \Countable
 {
-    /**
-     * @var array
-     */
-    protected $data = [];
-    /**
-     * @var array
-     */
-    protected $depends = [];
-    /**
-     * @var string
-     */
-    protected $dataFile;
+    protected array $data = [];
+
+    protected array $depends = [];
+
+    protected string $dataFile;
 
     /**
      * @param FixtureInterface[] $depends
@@ -74,6 +67,7 @@ abstract class Fixture implements FixtureInterface, \IteratorAggregate, \ArrayAc
      * @param mixed $offset
      * @return mixed|object|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->data[$offset] ?: null;
