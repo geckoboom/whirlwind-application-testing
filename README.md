@@ -157,8 +157,8 @@ use WhirlwindApplicationTesting\Fixture\EntityFixture;
 
 class UserFixture extends EntityFixture
 {
-    protected $dataFile = 'users.php';
-    protected $entityClass = User::class;
+    protected string $dataFile = 'users.php';
+    protected string $entityClass = User::class;
     
     public function __construct(UserHydrator $hydrator, UserTableGateway $tableGateway) 
     {
@@ -201,9 +201,9 @@ use WhirlwindApplicationTesting\Fixture\EntityFixture;
 
 class UserProfileFixture extends EntityFixture
 {
-    protected $dataFile = 'user_profiles.php';
-    protected $entityClass = UserProfile::class;
-    protected $depends = [
+    protected string $dataFile = 'user_profiles.php';
+    protected string $entityClass = UserProfile::class;
+    protected array $depends = [
         UserFixture::class,
     ];
     
