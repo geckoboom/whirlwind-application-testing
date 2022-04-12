@@ -6,6 +6,7 @@ namespace WhirlwindApplicationTesting\Traits;
 
 use League\Container\Definition\DefinitionInterface;
 use League\Container\DefinitionContainerInterface;
+use League\Container\Exception\NotFoundException;
 use Mockery\MockInterface;
 use Psr\Container\ContainerInterface;
 
@@ -33,17 +34,19 @@ trait InteractWithContainer
      */
     private function bindDefinition(string $id, $concrete): DefinitionInterface
     {
-        if ($this->container instanceof DefinitionContainerInterface) {
-            if ($this->container->has($id)) {
-                return $this->container->extend($id)->setConcrete($concrete);
-            } else {
-                return $this->container->add($id, $concrete);
-            }
+        if (!$this->container instanceof DefinitionContainerInterface) {
+            throw new \LogicException(
+                "Bind definition is only accepted for " . DefinitionContainerInterface::class . ' container'
+            );
         }
 
-        throw new \LogicException(
-            "Bind definition is only accepted for " . DefinitionContainerInterface::class . ' container'
-        );
+        if ($this->container->has($id)) {
+            try {
+                return $this->container->extend($id)->setConcrete($concrete);
+            } catch (NotFoundException $e) {} // delegated dependency
+        }
+
+        return $this->container->add($id, $concrete);
     }
 
     /**
