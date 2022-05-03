@@ -138,7 +138,7 @@ class TestResponse
 
     public function assertResponseIsJson(): self
     {
-        $content = $this->baseResponse->getBody()->getContents();
+        $content = (string) $this->baseResponse->getBody();
         assertNotEquals('', $content, 'Response is empty');
         \json_decode($content);
         $errorCode = \json_last_error();
@@ -159,7 +159,7 @@ class TestResponse
 
     public function assertResponseContains(string $needle, bool $escape = true): self
     {
-        $haystack = $this->baseResponse->getBody()->getContents();
+        $haystack = (string) $this->baseResponse->getBody();
 
         if ($escape) {
             $needle = \htmlspecialchars(
@@ -182,7 +182,7 @@ class TestResponse
 
     public function assertResponseNotContains(string $needle, bool $escape = true): self
     {
-        $haystack = $this->baseResponse->getBody()->getContents();
+        $haystack = (string) $this->baseResponse->getBody();
 
         if ($escape) {
             $needle = \htmlspecialchars(
@@ -217,8 +217,7 @@ class TestResponse
 
     public function decodeResponseJson(): AssertableJson
     {
-        $this->baseResponse->getBody()->rewind();
-        $testJson = new AssertableJson($this->baseResponse->getBody()->getContents());
+        $testJson = new AssertableJson((string) $this->baseResponse->getBody());
 
         $decodedResponse = $testJson->getJson();
         if (null === $decodedResponse || false === $decodedResponse) {
