@@ -147,7 +147,7 @@ trait MakesHttpRequests
 
         $query = [];
         $rawQuery = \parse_url($uri, PHP_URL_QUERY);
-        if (null !== $rawQuery) {
+        if (!empty($rawQuery)) {
             \parse_str($rawQuery, $query);
         }
         /** @var ServerRequestFactoryInterface $requestFactory */
